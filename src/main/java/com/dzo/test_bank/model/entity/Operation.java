@@ -35,6 +35,7 @@ public class Operation {
     @Column(name = "transaction_type", nullable = false)
     TransactionType transactionType;
 
+    @Builder.Default
     @Column(name = "created_at")
     private Date createdAt = new Date();
 
