@@ -1,4 +1,5 @@
-### VARIABLES DE ENTORNO
+### ENV VARS
+```src/main/resources/application.properties```
 
 * PORT= 8080
 * DATA_SOURCE_PASSWORD = tu_contraseña_secreta
@@ -7,5 +8,7 @@
 ### SWAGGER OPENAPI
 
 * URL LOCAL = http://localhost:8092/swagger-ui/index.html
-* URL REMOTE = https://test-bank.fly.dev/swagger-ui/index.html
 
+### DATA BASE STRUCTURE
+
+DIRECTORY: ```src/main/resources```
