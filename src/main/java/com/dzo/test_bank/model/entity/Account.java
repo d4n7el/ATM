@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,10 +30,14 @@ public class Account implements Serializable {
     private Integer userId;
 
     @NotNull
+    @Length(min = 2)
+    @Length(max = 20)
     @Column(name = "account_name", nullable = false)
     private String accountName;
 
     @NotNull
+    @Length(min = 4)
+    @Length(max = 20)
     @Column(name = "account_num", nullable = false)
     private String accountNum;
 
