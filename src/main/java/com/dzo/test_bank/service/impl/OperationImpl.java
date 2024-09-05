@@ -1,6 +1,6 @@
 package com.dzo.test_bank.service.impl;
 
-import com.dzo.test_bank.model.dao.OperationDao;
+import com.dzo.test_bank.model.repository.OperationRepository;
 import com.dzo.test_bank.model.dto.AccountDto;
 import com.dzo.test_bank.model.dto.OperationDetailDto;
 import com.dzo.test_bank.model.dto.OperationDto;
@@ -24,7 +24,7 @@ public class OperationImpl implements IOperation {
     @Autowired
     IUser userService;
     @Autowired
-    OperationDao operationDao;
+    OperationRepository operationRepository;
 
     @Transactional
     @Override
@@ -53,7 +53,7 @@ public class OperationImpl implements IOperation {
         operation.setPreviousBalance(account.getPreviousBalance());
 
         accountService.updateWhitAmount(account);
-        operationDao.save(operation);
+        operationRepository.save(operation);
         return OperationDto.from(operation, null,  AccountDto.from(account));
     }
 
@@ -69,7 +69,7 @@ public class OperationImpl implements IOperation {
         operation.setPreviousBalance(account.getPreviousBalance());
 
         accountService.updateWhitAmount(account);
-        operationDao.save(operation);
+        operationRepository.save(operation);
         return OperationDto.from(operation, AccountDto.from(account), null);
     }
 
@@ -86,10 +86,10 @@ public class OperationImpl implements IOperation {
         targetAccount.setCurrentBalance(targetAccount.getCurrentBalance() + operation.getTransactionAmount());
 
         accountService.updateWhitAmount(sourceAccount);
-        Operation debit = operationDao.save(Operation.toDebit(operation, sourceAccount));
+        Operation debit = operationRepository.save(Operation.toDebit(operation, sourceAccount));
 
         accountService.updateWhitAmount(targetAccount);
-        operationDao.save(Operation.toCredit(operation, targetAccount));
+        operationRepository.save(Operation.toCredit(operation, targetAccount));
 
         return OperationDto.from(
                 debit,
@@ -99,6 +99,6 @@ public class OperationImpl implements IOperation {
 
     @Override
     public List<OperationDetailDto> transactionsDetails() {
-        return OperationDetailDto.from(operationDao.transactionsDetails());
+        return OperationDetailDto.from(operationRepository.transactionsDetails());
     }
 }

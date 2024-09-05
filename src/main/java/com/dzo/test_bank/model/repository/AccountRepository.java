@@ -1,4 +1,4 @@
-package com.dzo.test_bank.model.dao;
+package com.dzo.test_bank.model.repository;
 
 import com.dzo.test_bank.model.entity.Account;
 import com.dzo.test_bank.projection.AccountProjection;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccountDao extends JpaRepository<Account, Integer> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     @Query("SELECT " +
             "a.accountId AS accountId, " +
@@ -22,7 +22,6 @@ public interface AccountDao extends JpaRepository<Account, Integer> {
             "INNER JOIN User u ON a.userId = u.userId " +
             "WHERE a.userId = :userId")
     List<AccountProjection> findUsersAccountsDetails(@Param("userId") Integer userId);
-
 
     @Query(value = "SELECT a.account_id, a.user_id, a.account_name, a.account_num, a.created_at, " +
             "a.updated_at, a.current_balance, a.previous_balance, u.first_name, u.last_name, u.email " +
@@ -36,19 +35,5 @@ public interface AccountDao extends JpaRepository<Account, Integer> {
             "FROM accounts a " +
             "JOIN users u ON a.user_id = u.user_id " ,nativeQuery = true)
     List<Account> accountsDetail();
-
-
-    @Query(value = "SELECT a.account_id, a.user_id, a.account_name, a.account_num, a.created_at, " +
-            "a.updated_at, a.current_balance, a.previous_balance, u.first_name, u.last_name, u.email " +
-            "FROM accounts a " +
-            "JOIN users u ON a.user_id = u.user_id " +
-            "WHERE a.user_id = :userId", nativeQuery = true)
-    List<Account> findAccountsByUserId(Integer userId);
-
-    @Query(value = "SELECT a.account_id, a.user_id, a.account_name, a.account_num, a.created_at, " +
-            "a.updated_at, a.current_balance, a.previous_balance, u.first_name, u.last_name, u.email " +
-            "FROM accounts a " +
-            "JOIN users u ON a.user_id = u.user_id " ,nativeQuery = true)
-    List<Account> findByAllDetail();
 
 }

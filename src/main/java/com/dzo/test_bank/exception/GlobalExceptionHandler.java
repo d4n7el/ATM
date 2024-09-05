@@ -1,6 +1,6 @@
 package com.dzo.test_bank.exception;
 
-import com.dzo.test_bank.payload.ApiResponse;
+import com.dzo.test_bank.payload.ApiResponseError;
 import com.dzo.test_bank.util.ErrorMessageUtil;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,61 +20,61 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse> handleMethodArgumentNotValidException(ConstraintViolationException e, WebRequest webRequest) {
+    public ResponseEntity<ApiResponseError> handleMethodArgumentNotValidException(ConstraintViolationException e, WebRequest webRequest) {
         String errorMessage = e.getMessage();
         Map<String, String> mapErrors = ErrorMessageUtil.generateErrorMessage(errorMessage);
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false), mapErrors );
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false), mapErrors );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest webRequest) {
+    public ResponseEntity<ApiResponseError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest webRequest) {
         Map<String, String> mapErrors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             mapErrors.put(fieldName, errorMessage);
         });
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false),  mapErrors );
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false),  mapErrors );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ApiResponse> handleNullPointerException(NullPointerException e, WebRequest webRequest) {
+    public ResponseEntity<ApiResponseError> handleNullPointerException(NullPointerException e, WebRequest webRequest) {
         String errorMessage = e.getMessage();
         Map<String, String> mapErrors = ErrorMessageUtil.generateErrorMessage(errorMessage);
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false), mapErrors );
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false), mapErrors );
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiResponse> handlerDataIntegrityViolationException(DataIntegrityViolationException e, WebRequest webRequest) {
+    public ResponseEntity<ApiResponseError> handlerDataIntegrityViolationException(DataIntegrityViolationException e, WebRequest webRequest) {
         String errorMessage = e.getMostSpecificCause().getMessage();
         Map<String, String> mapErrors = ErrorMessageUtil.generateErrorMessage(errorMessage);
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false), mapErrors );
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false), mapErrors );
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-    public ResponseEntity<ApiResponse> handlerDataIntegrityViolationException(InvalidDataAccessApiUsageException e, WebRequest webRequest) {
+    public ResponseEntity<ApiResponseError> handlerDataIntegrityViolationException(InvalidDataAccessApiUsageException e, WebRequest webRequest) {
         String errorMessage = e.getMostSpecificCause().getMessage();
         Map<String, String> mapErrors = ErrorMessageUtil.generateErrorMessage(errorMessage);
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false), mapErrors );
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false), mapErrors );
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ApiResponse> handleResourceNotFoundException(IllegalStateException e, WebRequest webRequest) {
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false), e.getMessage() );
+    public ResponseEntity<ApiResponseError> handleResourceNotFoundException(IllegalStateException e, WebRequest webRequest) {
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false), e.getMessage() );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest webRequest) {
-        ApiResponse response = new ApiResponse(webRequest.getDescription(false), e.getMessage() );
+    public ResponseEntity<ApiResponseError> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest webRequest) {
+        ApiResponseError response = new ApiResponseError(webRequest.getDescription(false), e.getMessage() );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

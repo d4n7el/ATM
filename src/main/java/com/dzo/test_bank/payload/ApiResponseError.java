@@ -9,24 +9,24 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
-public class ApiResponse {
+public class ApiResponseError {
     private String message = "";
     private Date date = new Date();
     private String path;
     Map<String, String> errors = new HashMap<>();
 
-    public ApiResponse(String path, String message, Map<String, String> mapErrors) {
+    public ApiResponseError(String path, String message, Map<String, String> mapErrors) {
         this.path = path.replace("uri=", "");
         this.message = message;
         this.errors = mapErrors;
     }
 
-    public ApiResponse(String path, Map<String, String> mapErrors) {
+    public ApiResponseError(String path, Map<String, String> mapErrors) {
         this.path = path.replace("uri=", "");
         this.errors = mapErrors;
     }
 
-    public ApiResponse(String path, String message) {
+    public ApiResponseError(String path, String message) {
         this.path = path.replace("uri=", "");
         this.message = message;
     }

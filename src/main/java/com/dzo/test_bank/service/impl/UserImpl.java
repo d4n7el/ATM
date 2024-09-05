@@ -1,6 +1,6 @@
 package com.dzo.test_bank.service.impl;
 
-import com.dzo.test_bank.model.dao.UserDao;
+import com.dzo.test_bank.model.repository.UserRepository;
 import com.dzo.test_bank.model.dto.UserBasicDto;
 import com.dzo.test_bank.model.dto.UserDto;
 import com.dzo.test_bank.projection.UserProjection;
@@ -15,35 +15,35 @@ import java.util.List;
 public class UserImpl implements IUser {
 
     @Autowired()
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
     public UserBasicDto save(User user) {
-        return UserBasicDto.from(userDao.save(user));
+        return UserBasicDto.from(userRepository.save(user));
     }
 
     @Transactional(readOnly = true)
     @Override
     public UserDto findById(Integer id) {
-        UserProjection user = userDao.findByIdUser(id);
+        UserProjection user = userRepository.findByIdUser(id);
         return UserDto.from(user);
     }
 
     public User getById(Integer id) {
-        return userDao.findById(id).orElse(null);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> findAll() {
-        List<UserProjection> users = userDao.findAllUsers();
+        List<UserProjection> users = userRepository.findAllUsers();
         return UserDto.from(users);
     }
 
     @Transactional
     @Override
     public void delete(User user) {
-        userDao.delete(user);
+        userRepository.delete(user);
     }
 }

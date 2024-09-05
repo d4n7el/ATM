@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan(basePackages = "com.dzo.test_bank.model.entity")
-@EnableJpaRepositories(basePackages = {"com.dzo.test_bank.model.dao"})
+@EnableJpaRepositories(basePackages = {"com.dzo.test_bank.model.repository"})
 
 
 public class TestBankApplication {

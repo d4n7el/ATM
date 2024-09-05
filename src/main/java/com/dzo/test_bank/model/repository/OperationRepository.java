@@ -1,4 +1,4 @@
-package com.dzo.test_bank.model.dao;
+package com.dzo.test_bank.model.repository;
 
 import com.dzo.test_bank.model.entity.Operation;
 import com.dzo.test_bank.projection.OperationProjection;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OperationDao extends JpaRepository<Operation,Integer> {
+public interface OperationRepository extends JpaRepository<Operation,Integer> {
     @Query("SELECT op.operationId AS operationId, " +
             "op.sourceAccountId AS sourceAccountId, " +
             "op.targetAccountId AS targetAccountId, " +
