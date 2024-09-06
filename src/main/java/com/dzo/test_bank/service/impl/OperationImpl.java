@@ -1,16 +1,15 @@
 package com.dzo.test_bank.service.impl;
 
-import com.dzo.test_bank.model.dto.AccountDto;
-import com.dzo.test_bank.model.dto.OperationDetailDto;
-import com.dzo.test_bank.model.dto.OperationDto;
-import com.dzo.test_bank.model.entity.Account;
-import com.dzo.test_bank.model.entity.Operation;
-import com.dzo.test_bank.model.enums.TransactionType;
-import com.dzo.test_bank.model.repository.OperationRepository;
+import com.dzo.test_bank.persistence.dto.AccountDto;
+import com.dzo.test_bank.persistence.dto.OperationDetailDto;
+import com.dzo.test_bank.persistence.dto.OperationDto;
+import com.dzo.test_bank.persistence.model.AccountJpa;
+import com.dzo.test_bank.persistence.model.OperationJpa;
+import com.dzo.test_bank.persistence.types.TransactionType;
+import com.dzo.test_bank.persistence.repository.OperationRepository;
 import com.dzo.test_bank.service.IAccount;
 import com.dzo.test_bank.service.IOperation;
 import com.dzo.test_bank.service.IUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,83 +17,81 @@ import java.util.List;
 
 @Service
 public class OperationImpl implements IOperation {
+    private final IAccount accountService;
+    private final IUser userService;
+    private final OperationRepository operationRepository;
 
-    @Autowired
-    IAccount accountService;
-    @Autowired
-    IUser userService;
-    @Autowired
-    OperationRepository operationRepository;
+    public OperationImpl(IAccount accountService, IUser userService, OperationRepository operationRepository) {
+        this.accountService = accountService;
+        this.userService = userService;
+        this.operationRepository = operationRepository;
+    }
 
     @Transactional
     @Override
-    public OperationDto save(Operation operation) {
-        if(operation.getTransactionType().name().equals(TransactionType.DEPOSIT.name()) ){
-            return createDeposit(operation);
-        }
-        if(operation.getTransactionType().name().equals(TransactionType.WITHDRAWAL.name()) ){
-            return createWithdrawal(operation);
-        }
-        if(operation.getTransactionType().name().equals(TransactionType.TRANSFER.name()) ){
-            return createTransfer(operation);
-        }
-        return null;
+    public OperationDto save(OperationJpa operationJpa) {
+        return switch (operationJpa.getTransactionType()) {
+            case DEPOSIT -> createDeposit(operationJpa);
+            case WITHDRAWAL -> createWithdrawal(operationJpa);
+            case TRANSFER -> createTransfer(operationJpa);
+            default -> null;
+        };
     }
 
     @Override
-    public OperationDto createDeposit(Operation operation) {
-        Account account = accountService.findByIdDetail(operation.getSourceAccountId());
-        userService.getById(operation.getCreateByUserId());
+    public OperationDto createDeposit(OperationJpa operationJpa) {
+        AccountJpa accountJpa = accountService.findByIdDetail(operationJpa.getSourceAccountId());
+        userService.getById(operationJpa.getCreateByUserId());
 
-        account.setPreviousBalance(account.getCurrentBalance());
-        account.setCurrentBalance(account.getCurrentBalance() + operation.getTransactionAmount());
+        accountJpa.setPreviousBalance(accountJpa.getCurrentBalance());
+        accountJpa.setCurrentBalance(accountJpa.getCurrentBalance() + operationJpa.getTransactionAmount());
 
-        operation.setFinalBalance(account.getCurrentBalance());
-        operation.setPreviousBalance(account.getPreviousBalance());
+        operationJpa.setFinalBalance(accountJpa.getCurrentBalance());
+        operationJpa.setPreviousBalance(accountJpa.getPreviousBalance());
 
-        accountService.updateWhitAmount(account);
-        operationRepository.save(operation);
-        return OperationDto.from(operation, null,  AccountDto.from(account));
+        accountService.updateWithAmount(accountJpa);
+        operationRepository.save(operationJpa);
+        return OperationDto.from(operationJpa, null,  AccountDto.from(accountJpa));
     }
 
     @Override
-    public OperationDto createWithdrawal(Operation operation) {
-        Account account = accountService.findByIdDetail(operation.getSourceAccountId());
-        userService.getById(operation.getCreateByUserId());
+    public OperationDto createWithdrawal(OperationJpa operationJpa) {
+        AccountJpa accountJpa = accountService.findByIdDetail(operationJpa.getSourceAccountId());
+        userService.getById(operationJpa.getCreateByUserId());
 
-        account.setPreviousBalance(account.getCurrentBalance());
-        account.setCurrentBalance(account.getCurrentBalance() - operation.getTransactionAmount());
+        accountJpa.setPreviousBalance(accountJpa.getCurrentBalance());
+        accountJpa.setCurrentBalance(accountJpa.getCurrentBalance() - operationJpa.getTransactionAmount());
 
-        operation.setFinalBalance(account.getCurrentBalance());
-        operation.setPreviousBalance(account.getPreviousBalance());
+        operationJpa.setFinalBalance(accountJpa.getCurrentBalance());
+        operationJpa.setPreviousBalance(accountJpa.getPreviousBalance());
 
-        accountService.updateWhitAmount(account);
-        operationRepository.save(operation);
-        return OperationDto.from(operation, AccountDto.from(account), null);
+        accountService.updateWithAmount(accountJpa);
+        operationRepository.save(operationJpa);
+        return OperationDto.from(operationJpa, AccountDto.from(accountJpa), null);
     }
 
     @Override
-    public OperationDto createTransfer(Operation operation) {
-        Account sourceAccount = accountService.findByIdDetail(operation.getSourceAccountId());
-        Account targetAccount = accountService.findByIdDetail(operation.getTargetAccountId());
-        userService.getById(operation.getCreateByUserId());
+    public OperationDto createTransfer(OperationJpa operationJpa) {
+        AccountJpa sourceAccountJpa = accountService.findByIdDetail(operationJpa.getSourceAccountId());
+        AccountJpa targetAccountJpa = accountService.findByIdDetail(operationJpa.getTargetAccountId());
+        userService.getById(operationJpa.getCreateByUserId());
 
-        sourceAccount.setPreviousBalance(sourceAccount.getCurrentBalance());
-        sourceAccount.setCurrentBalance(sourceAccount.getCurrentBalance() - operation.getTransactionAmount());
+        sourceAccountJpa.setPreviousBalance(sourceAccountJpa.getCurrentBalance());
+        sourceAccountJpa.setCurrentBalance(sourceAccountJpa.getCurrentBalance() - operationJpa.getTransactionAmount());
 
-        targetAccount.setPreviousBalance(targetAccount.getCurrentBalance());
-        targetAccount.setCurrentBalance(targetAccount.getCurrentBalance() + operation.getTransactionAmount());
+        targetAccountJpa.setPreviousBalance(targetAccountJpa.getCurrentBalance());
+        targetAccountJpa.setCurrentBalance(targetAccountJpa.getCurrentBalance() + operationJpa.getTransactionAmount());
 
-        accountService.updateWhitAmount(sourceAccount);
-        Operation debit = operationRepository.save(Operation.toDebit(operation, sourceAccount));
+        accountService.updateWithAmount(sourceAccountJpa);
+        OperationJpa debit = operationRepository.save(OperationJpa.toDebit(operationJpa, sourceAccountJpa));
 
-        accountService.updateWhitAmount(targetAccount);
-        operationRepository.save(Operation.toCredit(operation, targetAccount));
+        accountService.updateWithAmount(targetAccountJpa);
+        operationRepository.save(OperationJpa.toCredit(operationJpa, targetAccountJpa));
 
         return OperationDto.from(
                 debit,
-                AccountDto.from(sourceAccount),
-                AccountDto.from(targetAccount));
+                AccountDto.from(sourceAccountJpa),
+                AccountDto.from(targetAccountJpa));
     }
 
     @Override

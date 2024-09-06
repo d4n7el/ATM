@@ -1,6 +1,6 @@
 package com.dzo.test_bank.exception;
 
-import com.dzo.test_bank.payload.ApiResponseError;
+import com.dzo.test_bank.controller.payload.ApiResponseError;
 import com.dzo.test_bank.util.ErrorMessageUtil;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;

@@ -1,26 +1,27 @@
 package com.dzo.test_bank.service.impl;
 
-import com.dzo.test_bank.model.repository.UserRepository;
-import com.dzo.test_bank.model.dto.UserBasicDto;
-import com.dzo.test_bank.model.dto.UserDto;
-import com.dzo.test_bank.projection.UserProjection;
-import com.dzo.test_bank.model.entity.User;
+import com.dzo.test_bank.persistence.model.UserJpa;
+import com.dzo.test_bank.persistence.repository.UserRepository;
+import com.dzo.test_bank.persistence.dto.UserBasicDto;
+import com.dzo.test_bank.persistence.dto.UserDto;
+import com.dzo.test_bank.persistence.repository.projection.UserProjection;
 import com.dzo.test_bank.service.IUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
 public class UserImpl implements IUser {
+    private final  UserRepository userRepository;
 
-    @Autowired()
-    private UserRepository userRepository;
+    public UserImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Transactional
-    public UserBasicDto save(User user) {
-        return UserBasicDto.from(userRepository.save(user));
+    public UserBasicDto save(UserJpa userJpa) {
+        return UserBasicDto.from(userRepository.save(userJpa));
     }
 
     @Transactional(readOnly = true)
@@ -30,7 +31,7 @@ public class UserImpl implements IUser {
         return UserDto.from(user);
     }
 
-    public User getById(Integer id) {
+    public UserJpa getById(Integer id) {
         return userRepository.findById(id).orElse(null);
     }
 
@@ -43,7 +44,7 @@ public class UserImpl implements IUser {
 
     @Transactional
     @Override
-    public void delete(User user) {
-        userRepository.delete(user);
+    public void delete(UserJpa userJpa) {
+        userRepository.delete(userJpa);
     }
 }

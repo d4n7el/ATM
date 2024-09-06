@@ -1,4 +1,4 @@
-package com.dzo.test_bank.model.entity;
+package com.dzo.test_bank.persistence.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -20,7 +20,7 @@ import java.util.Date;
         @UniqueConstraint(columnNames = {"account_name", "account_num"})
 })
 @ToString
-public class Account implements Serializable {
+public class AccountJpa implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")

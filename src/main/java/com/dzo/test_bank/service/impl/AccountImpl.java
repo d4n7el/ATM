@@ -1,62 +1,63 @@
 package com.dzo.test_bank.service.impl;
 
-import com.dzo.test_bank.model.repository.AccountRepository;
-import com.dzo.test_bank.model.dto.AccountsByUserDto;
-import com.dzo.test_bank.model.dto.UserDto;
-import com.dzo.test_bank.model.entity.Account;
-import com.dzo.test_bank.projection.AccountProjection;
+import com.dzo.test_bank.persistence.repository.AccountRepository;
+import com.dzo.test_bank.persistence.dto.AccountsByUserDto;
+import com.dzo.test_bank.persistence.dto.UserDto;
+import com.dzo.test_bank.persistence.model.AccountJpa;
+import com.dzo.test_bank.persistence.repository.projection.AccountProjection;
 import com.dzo.test_bank.service.IAccount;
 import com.dzo.test_bank.service.IUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AccountImpl implements IAccount {
+    private final AccountRepository accountRepository;
+    private final IUser userService;
 
-    @Autowired()
-    private AccountRepository accountRepository;
-
-    @Autowired()
-    private IUser userService;
-
-    @Override
-    public Account save(Account account) {
-        account.setPreviousBalance(0.00);
-        account.setCurrentBalance(0.00);
-        return accountRepository.save(account);
+    public AccountImpl(AccountRepository accountRepository, IUser userService) {
+        this.accountRepository = accountRepository;
+        this.userService = userService;
     }
 
     @Override
-    public Account update(Account account) {
-        Account accountPersist = accountRepository.findById(account.getAccountId()).orElse(null);
-        if (accountPersist != null) {
-            account.setCurrentBalance(accountPersist.getCurrentBalance());
-            account.setPreviousBalance(accountPersist.getPreviousBalance());
-            return accountRepository.save(account);
+    public AccountJpa save(AccountJpa accountJpa) {
+        accountJpa.setPreviousBalance(0.00);
+        accountJpa.setCurrentBalance(0.00);
+        return accountRepository.save(accountJpa);
+    }
+
+    @Override
+    public AccountJpa update(AccountJpa accountJpa) {
+        AccountJpa accountJpaPersist = accountRepository.findById(accountJpa.getAccountId()).orElse(null);
+        if (accountJpaPersist != null) {
+            accountJpa.setCurrentBalance(accountJpaPersist.getCurrentBalance());
+            accountJpa.setPreviousBalance(accountJpaPersist.getPreviousBalance());
+            return accountRepository.save(accountJpa);
         }
         return null;
     }
 
-    public Account updateWhitAmount(Account account) {
-        accountRepository.findById(account.getAccountId());
-        return accountRepository.save(account);
+    @Override
+    public AccountJpa updateWithAmount(AccountJpa accountJpa) {
+        accountRepository.findById(accountJpa.getAccountId());
+        return accountRepository.save(accountJpa);
     }
 
     @Override
-    public Account findByIdDetail(Integer id) {
+    public AccountJpa findByIdDetail(Integer id) {
         return accountRepository.findByIdDetail(id);
     }
 
     @Override
-    public List<Account> findAll() {
+    public List<AccountJpa> findAll() {
         return accountRepository.findAll();
     }
 
     @Override
-    public void delete(Account account) {
-        accountRepository.delete(account);
+    public void delete(AccountJpa accountJpa) {
+        accountRepository.delete(accountJpa);
     }
 
     @Override

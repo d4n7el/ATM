@@ -1,4 +1,4 @@
-package com.dzo.test_bank.projection;
+package com.dzo.test_bank.persistence.repository.projection;
 
 import java.util.Date;
 

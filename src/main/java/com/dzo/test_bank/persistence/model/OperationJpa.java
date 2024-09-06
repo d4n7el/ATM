@@ -1,6 +1,6 @@
-package com.dzo.test_bank.model.entity;
+package com.dzo.test_bank.persistence.model;
 
-import com.dzo.test_bank.model.enums.TransactionType;
+import com.dzo.test_bank.persistence.types.TransactionType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "operations")
-public class Operation {
+public class OperationJpa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,30 +62,30 @@ public class Operation {
         }
     }
 
-    public static Operation toDebit(Operation operation, Account account) {
-        return Operation.builder()
-                .sourceAccountId(operation.getSourceAccountId())
-                .targetAccountId(operation.getTargetAccountId())
-                .createByUserId(operation.getCreateByUserId())
-                .createByUserId(operation.getCreateByUserId())
-                .transactionType(operation.getTransactionType())
-                .transactionAmount(operation.getTransactionAmount())
-                .previousBalance(account.getPreviousBalance())
-                .finalBalance(account.getCurrentBalance())
+    public static OperationJpa toDebit(OperationJpa operationJpa, AccountJpa accountJpa) {
+        return OperationJpa.builder()
+                .sourceAccountId(operationJpa.getSourceAccountId())
+                .targetAccountId(operationJpa.getTargetAccountId())
+                .createByUserId(operationJpa.getCreateByUserId())
+                .createByUserId(operationJpa.getCreateByUserId())
+                .transactionType(operationJpa.getTransactionType())
+                .transactionAmount(operationJpa.getTransactionAmount())
+                .previousBalance(accountJpa.getPreviousBalance())
+                .finalBalance(accountJpa.getCurrentBalance())
                 .createdAt(new Date())
                 .build();
     }
 
-    public static Operation toCredit(Operation operation, Account account) {
-        return Operation.builder()
-                .sourceAccountId(operation.getSourceAccountId ())
-                .targetAccountId(operation.getTargetAccountId())
-                .createByUserId(operation.getCreateByUserId())
-                .createByUserId(operation.getCreateByUserId())
+    public static OperationJpa toCredit(OperationJpa operationJpa, AccountJpa accountJpa) {
+        return OperationJpa.builder()
+                .sourceAccountId(operationJpa.getSourceAccountId ())
+                .targetAccountId(operationJpa.getTargetAccountId())
+                .createByUserId(operationJpa.getCreateByUserId())
+                .createByUserId(operationJpa.getCreateByUserId())
                 .transactionType(TransactionType.DEPOSIT)
-                .transactionAmount(operation.getTransactionAmount())
-                .previousBalance(account.getPreviousBalance())
-                .finalBalance(account.getCurrentBalance())
+                .transactionAmount(operationJpa.getTransactionAmount())
+                .previousBalance(accountJpa.getPreviousBalance())
+                .finalBalance(accountJpa.getCurrentBalance())
                 .createdAt(new Date())
                 .build();
     }

@@ -1,26 +1,22 @@
 package com.dzo.test_bank.controller;
 
-import com.dzo.test_bank.model.dto.AccountDto;
-import com.dzo.test_bank.model.dto.AccountsByUserDto;
-import com.dzo.test_bank.model.entity.Account;
+import com.dzo.test_bank.persistence.dto.AccountDto;
+import com.dzo.test_bank.persistence.dto.AccountsByUserDto;
+import com.dzo.test_bank.persistence.model.AccountJpa;
 import com.dzo.test_bank.service.IAccount;
-import com.dzo.test_bank.service.IUser;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("api/v1")
 public class AccountController extends BaseController{
+    private final IAccount accountService;
 
-    @Autowired
-    private IAccount accountService;
-
-    @Autowired
-    private IUser userService;
+    public AccountController(IAccount accountService) {
+        this.accountService = accountService;
+    }
 
     @GetMapping("/account/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
@@ -30,28 +26,28 @@ public class AccountController extends BaseController{
 
     @GetMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<Account> accounts() {
+    public List<AccountJpa> accounts() {
         return accountService.findAll();
     }
 
     @GetMapping("/account/{accountId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account account(@PathVariable Integer accountId) {
+    public AccountJpa account(@PathVariable Integer accountId) {
         return accountService.findByIdDetail(accountId);
     }
 
     @PostMapping("/account")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDto create(@RequestBody @Valid Account account) {
-        Account newAccount = accountService.save(account);
-        return AccountDto.from(newAccount);
+    public AccountDto create(@RequestBody @Valid AccountJpa accountJpa) {
+        AccountJpa newAccountJpa = accountService.save(accountJpa);
+        return AccountDto.from(newAccountJpa);
     }
 
     @PutMapping("/account")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountDto update(@RequestBody @Valid Account account) {
-        Account newAccount = accountService.update(account);
-        return AccountDto.from(newAccount);
+    public AccountDto update(@RequestBody @Valid AccountJpa accountJpa) {
+        AccountJpa newAccountJpa = accountService.update(accountJpa);
+        return AccountDto.from(newAccountJpa);
     }
 
     @DeleteMapping("/account/{accountId}")

@@ -4,7 +4,7 @@
 
 * PORT= 8080
 * DATA_SOURCE_PASSWORD = tu_contraseña_secreta
-* DATABASE_URL = jdbc:postgresql://localhost:5432/test-bank?user=postgres&password=tu_contraseña
+* DATABASE_URL = jdbc:postgresql://localhost:5432/test-bank?userJpa=postgres&password=tu_contraseña
 
 ### SWAGGER OPENAPI
 

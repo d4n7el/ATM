@@ -1,7 +1,7 @@
-package com.dzo.test_bank.model.dto;
+package com.dzo.test_bank.persistence.dto;
 
-import com.dzo.test_bank.model.entity.Account;
-import com.dzo.test_bank.projection.AccountProjection;
+import com.dzo.test_bank.persistence.model.AccountJpa;
+import com.dzo.test_bank.persistence.repository.projection.AccountProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,13 +34,13 @@ public class AccountDto {
                 .toList();
     }
 
-    public static AccountDto from(Account account) {
+    public static AccountDto from(AccountJpa accountJpa) {
         AccountDto dto = new AccountDto();
-        dto.setAccountId(account.getAccountId());
-        dto.setAccountName(account.getAccountName());
-        dto.setAccountNum(account.getAccountNum());
-        dto.setCurrentBalance(account.getCurrentBalance());
-        dto.setPreviousBalance(account.getPreviousBalance());
+        dto.setAccountId(accountJpa.getAccountId());
+        dto.setAccountName(accountJpa.getAccountName());
+        dto.setAccountNum(accountJpa.getAccountNum());
+        dto.setCurrentBalance(accountJpa.getCurrentBalance());
+        dto.setPreviousBalance(accountJpa.getPreviousBalance());
         return dto;
     }
 }

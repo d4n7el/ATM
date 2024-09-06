@@ -1,9 +1,7 @@
-package com.dzo.test_bank.model.dto;
+package com.dzo.test_bank.persistence.dto;
 
-import com.dzo.test_bank.model.entity.Operation;
-import com.dzo.test_bank.model.enums.TransactionType;
-import com.dzo.test_bank.projection.AccountProjection;
-import com.dzo.test_bank.projection.OperationProjection;
+import com.dzo.test_bank.persistence.types.TransactionType;
+import com.dzo.test_bank.persistence.repository.projection.OperationProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,19 +13,19 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class OperationDetailDto {
-    public String sourceAccountName;
-    public String sourceAccountNum;
-    public String targetAccountName;
-    public String targetAccountNum;
-    public Double finalBalance;
-    public Double transactionAmount;
-    public Double previousBalance;
-    public TransactionType transactionType;
-    public Integer sourceAccountId;
-    public Integer targetAccountId;
-    public Integer operationId;
-    public Date createdAt;
-    public UserBasicDto createBy;
+    public final String sourceAccountName;
+    public final String sourceAccountNum;
+    public final String targetAccountName;
+    public final String targetAccountNum;
+    public final Double finalBalance;
+    public final Double transactionAmount;
+    public final Double previousBalance;
+    public final TransactionType transactionType;
+    public final Integer sourceAccountId;
+    public final Integer targetAccountId;
+    public final Integer operationId;
+    public final Date createdAt;
+    public final UserBasicDto createBy;
 
     public static OperationDetailDto from(OperationProjection operation) {
         return OperationDetailDto.builder()

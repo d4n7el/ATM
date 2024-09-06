@@ -1,4 +1,4 @@
-package com.dzo.test_bank.model.enums;
+package com.dzo.test_bank.persistence.types;
 
 public enum TransactionType {
 

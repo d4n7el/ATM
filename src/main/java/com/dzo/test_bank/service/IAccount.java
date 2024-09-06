@@ -1,15 +1,15 @@
 package com.dzo.test_bank.service;
 
-import com.dzo.test_bank.model.dto.AccountsByUserDto;
-import com.dzo.test_bank.model.entity.Account;
+import com.dzo.test_bank.persistence.dto.AccountsByUserDto;
+import com.dzo.test_bank.persistence.model.AccountJpa;
 import java.util.List;
 
 public interface IAccount {
-    Account save(Account account);
-    Account update(Account account);
-    Account findByIdDetail(Integer accountId);
-    List<Account> findAll();
-    void delete(Account account);
+    AccountJpa save(AccountJpa accountJpa);
+    AccountJpa update(AccountJpa accountJpa);
+    AccountJpa findByIdDetail(Integer accountId);
+    List<AccountJpa> findAll();
+    void delete(AccountJpa accountJpa);
     AccountsByUserDto getAccountsByUser(Integer userId);
-    Account updateWhitAmount(Account account);
+    AccountJpa updateWithAmount(AccountJpa accountJpa);
 }

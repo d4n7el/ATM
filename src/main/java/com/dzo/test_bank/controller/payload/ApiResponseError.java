@@ -1,4 +1,4 @@
-package com.dzo.test_bank.payload;
+package com.dzo.test_bank.controller.payload;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

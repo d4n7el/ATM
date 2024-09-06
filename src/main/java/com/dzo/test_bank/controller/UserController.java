@@ -1,21 +1,21 @@
 package com.dzo.test_bank.controller;
 
-import com.dzo.test_bank.model.dto.UserBasicDto;
-import com.dzo.test_bank.model.dto.UserDto;
-import com.dzo.test_bank.model.entity.User;
+import com.dzo.test_bank.persistence.dto.UserBasicDto;
+import com.dzo.test_bank.persistence.dto.UserDto;
+import com.dzo.test_bank.persistence.model.UserJpa;
 import com.dzo.test_bank.service.IUser;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
 public class UserController extends BaseController{
-    @Autowired
-    private IUser userService;
+    private final IUser userService;
+
+    public UserController(IUser userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,20 +31,20 @@ public class UserController extends BaseController{
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserBasicDto create(@RequestBody @Valid User user) {
-        return userService.save(user);
+    public UserBasicDto create(@RequestBody @Valid UserJpa userJpa) {
+        return userService.save(userJpa);
     }
 
     @PutMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserBasicDto update(@RequestBody @Valid User user) {
-        return create(user);
+    public UserBasicDto update(@RequestBody @Valid UserJpa userJpa) {
+        return create(userJpa);
     }
 
     @DeleteMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer userId) {
-        User user = userService.getById(userId);
-        userService.delete(user);
+        UserJpa userJpa = userService.getById(userId);
+        userService.delete(userJpa);
     }
 }

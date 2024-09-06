@@ -1,4 +1,4 @@
-package com.dzo.test_bank.model.entity;
+package com.dzo.test_bank.persistence.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class UserJpa implements Serializable {
 
     @Id
     @Column(name = "user_id")

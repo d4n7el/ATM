@@ -1,28 +1,28 @@
 package com.dzo.test_bank.controller;
 
-import com.dzo.test_bank.model.dto.OperationDetailDto;
-import com.dzo.test_bank.model.dto.OperationDto;
-import com.dzo.test_bank.model.entity.Operation;
-import com.dzo.test_bank.model.enums.TransactionType;
+import com.dzo.test_bank.persistence.dto.OperationDetailDto;
+import com.dzo.test_bank.persistence.dto.OperationDto;
+import com.dzo.test_bank.persistence.model.OperationJpa;
+import com.dzo.test_bank.persistence.types.TransactionType;
 import com.dzo.test_bank.service.IOperation;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
 public class OperationController extends BaseController{
+    private final IOperation operationService;
 
-    @Autowired
-    IOperation operationService;
+    public OperationController(IOperation operationService) {
+        this.operationService = operationService;
+    }
 
     @PostMapping("/operation")
     @ResponseStatus(HttpStatus.CREATED)
-    public OperationDto create(@RequestBody @Valid Operation operation) {
-        return operationService.save(operation);
+    public OperationDto create(@RequestBody @Valid OperationJpa operationJpa) {
+        return operationService.save(operationJpa);
     }
 
     @GetMapping("/operations")
