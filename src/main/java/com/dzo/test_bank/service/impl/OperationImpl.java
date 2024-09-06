@@ -1,12 +1,12 @@
 package com.dzo.test_bank.service.impl;
 
-import com.dzo.test_bank.model.repository.OperationRepository;
 import com.dzo.test_bank.model.dto.AccountDto;
 import com.dzo.test_bank.model.dto.OperationDetailDto;
 import com.dzo.test_bank.model.dto.OperationDto;
 import com.dzo.test_bank.model.entity.Account;
 import com.dzo.test_bank.model.entity.Operation;
 import com.dzo.test_bank.model.enums.TransactionType;
+import com.dzo.test_bank.model.repository.OperationRepository;
 import com.dzo.test_bank.service.IAccount;
 import com.dzo.test_bank.service.IOperation;
 import com.dzo.test_bank.service.IUser;
@@ -98,7 +98,15 @@ public class OperationImpl implements IOperation {
     }
 
     @Override
-    public List<OperationDetailDto> transactionsDetails() {
-        return OperationDetailDto.from(operationRepository.transactionsDetails());
+    public List<OperationDetailDto> transactionsDetails(
+            TransactionType transactionType,
+            String firstName,
+            String sourceAccountNum,
+            String targetAccountNum) {
+        return OperationDetailDto.from(operationRepository.transactionsDetails(
+                transactionType,
+                firstName,
+                sourceAccountNum,
+                targetAccountNum));
     }
 }

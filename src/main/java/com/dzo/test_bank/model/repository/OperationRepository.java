@@ -1,9 +1,11 @@
 package com.dzo.test_bank.model.repository;
 
 import com.dzo.test_bank.model.entity.Operation;
+import com.dzo.test_bank.model.enums.TransactionType;
 import com.dzo.test_bank.projection.OperationProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,6 +31,14 @@ public interface OperationRepository extends JpaRepository<Operation,Integer> {
             "FROM Operation as op " +
             "LEFT JOIN Account AS sourceAccount ON op.sourceAccountId = sourceAccount.accountId " +
             "LEFT JOIN Account AS targetAccount ON op.targetAccountId = targetAccount.accountId " +
-            "INNER JOIN User AS u ON op.createByUserId = u.userId")
-    List<OperationProjection> transactionsDetails();
+            "INNER JOIN User AS u ON op.createByUserId = u.userId " +
+            "WHERE (:transactionType IS NULL OR op.transactionType LIKE :transactionType) " +
+            "AND (:firstName IS NULL OR u.firstName LIKE %:firstName%) " +
+            "AND (:sourceAccountNum IS NULL OR sourceAccount.accountNum LIKE %:sourceAccountNum%) " +
+            "AND (:targetAccountNum IS NULL OR targetAccount.accountNum LIKE %:targetAccountNum%) ")
+    List<OperationProjection> transactionsDetails(
+            @Param("transactionType") TransactionType transactionType,
+            @Param("firstName") String firstName,
+            @Param("sourceAccountNum") String sourceAccountNum,
+            @Param("targetAccountNum") String targetAccountNum);
 }

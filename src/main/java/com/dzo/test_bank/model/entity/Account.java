@@ -61,7 +61,7 @@ public class Account implements Serializable {
     }
 
     private void validateCurrentBalance() {
-        if(currentBalance < 0){
+        if (currentBalance < 0) {
             throw new IllegalStateException("overdrafts_on_the_account ");
         }
     }
