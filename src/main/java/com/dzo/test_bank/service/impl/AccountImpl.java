@@ -47,7 +47,7 @@ public class AccountImpl implements IAccount {
 
     @Override
     public AccountJpa findByIdDetail(Integer id) {
-        return accountRepository.findByIdDetail(id);
+        return accountRepository.findById(id).orElse(null);
     }
 
     @Override

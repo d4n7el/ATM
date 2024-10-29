@@ -21,10 +21,15 @@ public interface AccountRepository extends JpaRepository<AccountJpa, Integer> {
             "WHERE a.userId = :userId")
     List<AccountProjection> findUsersAccountsDetails(@Param("userId") Integer userId);
 
-    @Query("SELECT a.accountId, a.userId, a.accountName, a.accountNum, a.createdAt, " +
-            "a.updatedAt, a.currentBalance, a.previousBalance, u.firstName, u.lastName, u.email " +
+    @Query("SELECT a.accountId AS accountId, " +
+            "a.userId AS userId, " +
+            "a.accountName AS accountName, " +
+            "a.accountNum AS accountNum, " +
+            "a.createdAt AS createdAt, " +
+            "a.updatedAt AS updatedAt, " +
+            "a.currentBalance AS currentBalance, " +
+            "a.previousBalance AS previousBalance " +
             "FROM AccountJpa a " +
-            "JOIN UserJpa u ON a.userId = u.userId " +
             "WHERE a.accountId = :accountId")
     AccountJpa findByIdDetail(@Param("accountId") Integer accountId);
 
