@@ -2,9 +2,9 @@
 
 ```src/main/resources/application.properties```
 
-* PORT= 8080
-* DATA_SOURCE_PASSWORD = tu_contraseña_secreta
-* DATABASE_URL = jdbc:postgresql://localhost:5432/test-bank?userJpa=postgres&password=tu_contraseña
+DATA_SOURCE_PASSWORD=*****;
+DATABASE_URL=jdbc:postgresql://localhost:5432/test-bank;
+PORT=8092
 
 ### SWAGGER OPENAPI
 
